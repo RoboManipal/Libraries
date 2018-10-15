@@ -21,7 +21,7 @@ void ServoChain::setNumberOfPololusTo(int pololu_number)
 ServoChain::ServoChain(){
   // Blank Constructor
 }
-ServoChain::ServoChain(HardwareSerial *dynamixel_serial, HardwareSerial *pololu_serial,HardwareSerial *debugger_serial,int Level)
+ServoChain::ServoChain(HardwareSerial *dynamixel_serial, Stream *pololu_serial,HardwareSerial *debugger_serial,int Level)
 {
   // Dynamixel serial
   this->dynamixelSerial=dynamixel_serial;
@@ -31,6 +31,7 @@ ServoChain::ServoChain(HardwareSerial *dynamixel_serial, HardwareSerial *pololu_
   this->servoDebuggerSerial=debugger_serial;
   // Priority level of the debugger
   this->debuggerPriorityLevel=Level;
+
 }
 // Debugger prioriy level adjustment
 void ServoChain::SetDebuggerPriorityToLevel(int minLevel) {
@@ -43,6 +44,10 @@ void ServoChain::Initialize(int chain_length,int *select_array,int *servo_IDs)
   for(int i=0;i<chain_length;i++)
   {
     this->servo_IDs[i]=servo_IDs;
+    if(select_array[i]==0)
+    {
+      pololu[i].InitializePololuServo(this->pololuSerial, this->servo_IDs[i]);
+    }
   }
 }
 // Configure servo selection pins

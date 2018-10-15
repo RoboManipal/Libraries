@@ -34,7 +34,7 @@ protected:
   int pullup_pin; // input pullup pin for pololus
   int pololu_playtimes;
   XYZrobotServo *pololu;
-  HardwareSerial *pololuSerial;
+  Stream *pololuSerial;
 
   //######Debugger ########
   void DebuggerOutput(int Level, String output);
@@ -42,7 +42,7 @@ public:
   //######## Initializer functions ########
   //Constructors
   ServoChain();
-  ServoChain(HardwareSerial *dynamixel_serial, HardwareSerial *pololu_serial, HardwareSerial *debugger_serial,int Level);
+  ServoChain(HardwareSerial *dynamixel_serial, Stream *pololu_serial, HardwareSerial *debugger_serial,int Level);
   // Setting the debugger priority, messages less than this level are not displayed
   void SetDebuggerPriorityToLevel(int minLevel);
   // User inputs a binary chain where 1 represents dynamixel and 0 -pololu
