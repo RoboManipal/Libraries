@@ -3,15 +3,14 @@ Original written by:
             Cytron Technologies
 
 Modified:
-  29/06/15  Idris, Cytron Technologies    - Point to IDE SoftwareSerial
-                                          - Restructure the code style to follow standard Arduino library
+  03/12/18
 */
 
 #ifndef CytronPS2_h
 #define CytronPS2_h
 
 #include "Arduino.h"
-#include <SoftwareSerial.h>
+#include "DebuggerSerial.h"
 
 // Arduino Leonardo
 #if defined (__AVR_ATmega32U4__)
@@ -54,36 +53,38 @@ enum {
   PS2_JOYSTICK_RIGHT_RIGHT,
   // Check connection status
   PS2_CONNECTION_STATUS,
-  // Control motor vibrarion
-  PS2_MOTOR_1,
-  PS2_MOTOR_2,
   // Read all button
   PS2_BUTTON_JOYSTICK
 };
 
 class CytronPS2
 {
+  private:
+    Stream *ps2Serial;
+    void write(uint8_t data);
+    uint8_t read(void);
+
   public:
-	  boolean SERIAL_ERR;
-    HardwareSerial *ps2Serial;
-	  uint8_t ps_data[6];
-    uint8_t _txpin, _rxpin;
 
     // Hardware Serial
     CytronPS2();
-    void AttachSerial(HardwareSerial *ps2_serial);
-    void Initialize(uint8_t rxpin, uint8_t txpin);
-    void begin(uint32_t baudrate);
+    void AttachDebugSerial();
+    void AttachSerial(Stream *ps2_serial);
     uint8_t readButton(uint8_t key);
-    boolean readAllButton();
-    void vibrate(uint8_t motor, uint8_t value);
-    void reset(uint8_t reset);
+    //####################### Debugger #################
+    DebuggerSerial debugger;
 
-  protected:
-    boolean hardwareSerial;
-    SoftwareSerial *PS2Serial;
-    void write(uint8_t data);
-    uint8_t read(void);
+    float left_x;
+    float left_y;
+    // The desired speed and angle values calculated from the PS2
+    int speeds;
+    float angle;
+
+    // #################### PS2 ###################################
+    //To obtain the analog values from the left side of the joystick
+    // To convert the coordinates from -128 to 128 and map the space into a square
+    //To calculate angle value and the speed from the analog input obtained from the PS2
+    void ReadPS2Values(bool select, float scaling_factor);
 };
 
 #endif

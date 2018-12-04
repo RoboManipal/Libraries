@@ -7,92 +7,30 @@ Modified:
                                           - Restructure the code style to follow standard Arduino library
 */
 
-#include "HardwareSerial.h"
 #include "CytronPS2.h"
 
-/*CytronPS2::CytronPS2(uint8_t rxpin, uint8_t txpin)
-{
-  _txpin = txpin;
-  _rxpin = rxpin;
-}
-*/
 CytronPS2::CytronPS2()
 {
-  _txpin = 1;
-  _rxpin = 0;
-}
-void CytronPS2::Initialize(uint8_t rxpin, uint8_t txpin)
-{
-  _txpin = txpin;
-  _rxpin = rxpin;
-}
-void CytronPS2::AttachSerial(HardwareSerial *ps2_serial)
-{
-  ps2Serial=ps2_serial;
-}
-void CytronPS2::begin(uint32_t baudrate)
-{
 
-  // Compatibility with Harware Serials
-  if(_rxpin == 0 && _txpin == 1)
-	{
-		hardwareSerial = true;
-    AttachSerial(&Serial);
-		ps2Serial->begin(baudrate);
-		while(!ps2Serial);
-	}
 
-  if(_rxpin==19 && _txpin==18)
-  {
-    hardwareSerial = true;
-    AttachSerial(&Serial1);
-		ps2Serial->begin(baudrate);
-		while(!ps2Serial);
-  }
-  if(_rxpin==17 && _txpin==16)
-  {
-    hardwareSerial = true;
-    AttachSerial(&Serial2);
-		ps2Serial->begin(baudrate);
-		while(!ps2Serial);
-  }
-  if(_rxpin==15 && _txpin==14)
-  {
-    hardwareSerial = true;
-    AttachSerial(&Serial3);
-		ps2Serial->begin(baudrate);
-		while(!ps2Serial);
-  }
-  // Creates Software Serial
-	else
-	{
-		hardwareSerial = false;
-		pinMode(_rxpin, INPUT);
-		pinMode(_txpin, OUTPUT);
-		PS2Serial = new SoftwareSerial(_rxpin, _txpin);
-		PS2Serial->begin(baudrate);
-	}
-	pinMode(A1, OUTPUT);
-	digitalWrite(A1, HIGH);
 }
-
+void CytronPS2:: AttachDebugSerial()
+{
+	this->debugger.AttachSerial(&Serial);
+	this->debugger.print("Debugger Serial attached", INFO);
+}
+void CytronPS2:: AttachSerial(Stream *ps2_serial)
+{
+	this->ps2Serial=ps2_serial;
+}
 void CytronPS2::write(uint8_t data)
 {
-	if(hardwareSerial)
-	{
 		while(ps2Serial->available() > 0) {
 			ps2Serial->read();
 		}
 		ps2Serial->write(data);
 		ps2Serial->flush();		// Wait for all data transmitted
-	}
-	else
-	{
-		while(PS2Serial->available() > 0) {
-			PS2Serial->read();
-		}
-		PS2Serial->write(data);
-	}
+
 }
 
 uint8_t CytronPS2::read(void)
@@ -100,96 +38,102 @@ uint8_t CytronPS2::read(void)
 	uint8_t rec_data;
 	long waitcount = 0;
 
-	if(hardwareSerial)
-	{
+
 		while(true)
 		{
 			if(ps2Serial->available() > 0)
 			{
 				rec_data = ps2Serial->read();
-				SERIAL_ERR = false;
+				//SERIAL_ERR = false;
 				return(rec_data);
 			}
 			waitcount++;
 			if(waitcount > 50000)
 			{
-				SERIAL_ERR = true;
+				//SERIAL_ERR = true;
 				return(0xFF);
 			}
 		}
-	}
-	else
-	{
-		while(true)
-		{
-			if(PS2Serial->available() > 0)
-			{
-				rec_data = PS2Serial->read();
-				SERIAL_ERR = false;
-				return(rec_data);
-			}
-			waitcount++;
-			if(waitcount > 50000)
-			{
-				SERIAL_ERR = true;
-				return (0xFF);
-			}
-		}
-	}
+
 }
 
 uint8_t CytronPS2::readButton(uint8_t key)
 {
-	if(!hardwareSerial) PS2Serial->listen();
+	//if(!hardwareSerial) PS2Serial->listen();
 	write(key);
 	return read();
 }
 
-boolean CytronPS2::readAllButton()
+//To obtain the analog values from the left side of the joystick
+void CytronPS2::ReadPS2Values(bool select, float scaling_factor)
 {
-	uint8_t nbyte;
-	uint32_t waitcount;
-
-	write(PS2_BUTTON_JOYSTICK);
-
-	if(hardwareSerial)
-	{
-		nbyte = ps2Serial->readBytes(ps_data, 6);
-
-		if(nbyte == 6) return(true);
-		else return (false);
-	}
-
-	else
-	{
-		waitcount = 0;
-		while(PS2Serial->available() < 6)
+	  float temp;
+		if(select)
 		{
-			waitcount++;
-			if(waitcount > 50000) {
-				return (false);
-			}
+  // Read analog values from the right side of the joystick
+  this->left_x = 255 - readButton(PS2_JOYSTICK_RIGHT_X_AXIS);
+  this->left_y = readButton(PS2_JOYSTICK_RIGHT_Y_AXIS);
 		}
-		for(int i = 0; i < 6; i++) {
-			ps_data[i] = PS2Serial->read();
+		else
+		{
+			// Read analog values from the left side of the joystick
+		  this->left_x = 255 - readButton(PS2_JOYSTICK_LEFT_X_AXIS);
+		  this->left_y = readButton(PS2_JOYSTICK_LEFT_Y_AXIS);
 		}
-		return(true);
+	// Values mapped from 0 - 255 to -127- 128 to emulate Cartesian coordinates
+  //Also the values are mapped from -127 to 127 to ensure a square which will later be used in the mapping
+  this->left_x=-(this->left_x-127);
+  if(this->left_x==-128)
+    {
+      this->left_x=-127;
+    }
+  this->left_y=-(this->left_y-127);
+  if(this->left_y==-128){
+    this->left_y=-127;
+  }
+
+
+// SIMPLE STRETCHING
+// The following equations map the sqaure formed to a circle . Refer to the README for documentation
+  if(pow(this->left_x,2)>=pow(this->left_y,2))
+  {
+    temp=pow(this->left_x,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    this->left_y=(this->left_y*pow(this->left_x,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_x));
+    this->left_x=temp;
+  }
+
+  else
+  {
+    temp=(this->left_x*pow(this->left_y,2))/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    this->left_y=pow(this->left_y,3)/(sqrt(pow(this->left_x,2)+pow(this->left_y,2))*abs(this->left_y));
+    this->left_x=temp;
+
+  }
+
+	// CAlculate the angle of desired motion
+	temp=(float)this->left_y/ this->left_x;
+	this->angle=atan2(this->left_x,this->left_y);
+	// To keep angle range 2pi radians
+	if(this->angle<0)
+	{
+		this->angle=3.14+(3.14+this->angle);
 	}
-}
+	// The scaling factor is present to modify the maximum permissible speed for the bot
+	this->speeds=scaling_factor* (pow(pow(this->left_x,2)+pow(this->left_y,2),0.5));
 
-void CytronPS2::vibrate(uint8_t motor, uint8_t value)
-{
-	uint8_t _motor;
+  // Debugger message (Level: DEBUG)
+  // X: %X_COORDINATE%  Y:%Y_COORDINATE%
+  // For example: X: 0  Y: 127
+  String msg="X: ";
+  msg.concat(this->left_x);
+  msg.concat("   Y: ");
+  msg.concat(this->left_y);
+  this->debugger.print(msg,DEBUG);
 
-	if(motor == 1) _motor = PS2_MOTOR_1;
-	else _motor = PS2_MOTOR_2;
+	String message="Angle: ";
+  message.concat(this->angle);
+  message.concat("      Speed : ");
+  message.concat(speeds);
+  this->debugger.print(message,DEBUG);
 
-	write(_motor);
-	write(value);
-}
-
-void CytronPS2::reset(uint8_t reset)
-{
-	if(reset == 1) digitalWrite(A1, LOW);
-	else digitalWrite(A1, HIGH);
 }
