@@ -34,11 +34,11 @@ The library stands for _N Wheel Concentric Holonomic Base_.
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benefits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```bash
-git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
+git clone https://github.com/RoboManipal/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
 
-**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/dev/NWCHBase).
+**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal/Libraries/tree/dev/NWCHBase).
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
@@ -186,4 +186,4 @@ Sends out the PWM vector
 
 [![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
-[![Spawning issue](https://img.shields.io/badge/issue-%236-green.svg)](https://github.com/RoboManipal-9-0/Libraries/issues/6)
+[![Spawning issue](https://img.shields.io/badge/issue-%236-green.svg)](https://github.com/RoboManipal/Libraries/issues/6)

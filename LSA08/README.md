@@ -29,13 +29,13 @@ This library is for the Cytron Line Sensing Array: LSA08 (reference  [here](http
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benifits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```
-git clone https://github.com/RoboManipal-9-0/Libraries.git
+git clone https://github.com/RoboManipal/Libraries.git
 ```
-**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/LSA08)
+**Not recommended**: You can download _only_ this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal/Libraries/LSA08)
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can click [here](https://www.arduino.cc/en/hacking/libraries).<br>
-Also, this Library makes use of the DebuggerSerial Library. For More Information on this, click [here](https://github.com/RoboManipal-9-0/Libraries/tree/master/DebuggerSerial).
+Also, this Library makes use of the DebuggerSerial Library. For More Information on this, click [here](https://github.com/RoboManipal/Libraries/tree/master/DebuggerSerial).
 
 In order to use this library, you must do the following:
 - Include the header file `LSA08.h` (the *LSA08* library folder must be in your arduino libraries folder).
@@ -179,7 +179,7 @@ Let's explore the class now
 
 ### Public members
 #### Members
-- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger for the class. Check the [DebuggerSerial documentation](https://github.com/RoboManipal-9-0/Libraries/tree/master/DebuggerSerial) for more on this.
+- **<font color="#CD00FF">DebuggerSerial</font> debugger**: The debugger for the class. Check the [DebuggerSerial documentation](https://github.com/RoboManipal/Libraries/tree/master/DebuggerSerial) for more on this.
 
 #### Constructors
 - **<font color="#5052FF">LSA08</font> ( )** : Empty constructor for the class.

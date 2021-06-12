@@ -12,7 +12,7 @@
  *    Check the end of file for more comments on testing
  *    
  * Created by : @TheProjectsGuy
- * Maintained by : RoboManipal-9-0 organization
+ * Maintained by : RoboManipal organization
  */
 // Include header files for the library
 #include <DebuggerSerial.h>
