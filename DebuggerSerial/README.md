@@ -42,7 +42,7 @@ The **DebuggerSerial** library is for defining and using a serial as a debugger.
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benefits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```bash
-git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
+git clone https://github.com/RoboManipal/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master branch_.
 
@@ -237,4 +237,4 @@ All user levels can be accessed using the function **DebuggerOutput**. It's a pr
 
 [![Image](https://img.shields.io/badge/developed%20using-VSCode-lightgrey.svg)](https://code.visualstudio.com/)
 [![Image](https://img.shields.io/badge/Developer-TheProjectsGuy-blue.svg)](https://github.com/TheProjectsGuy)
-[![Spawning issue](https://img.shields.io/badge/issue-%237-green.svg)](https://github.com/RoboManipal-9-0/Libraries/issues/7)
+[![Spawning issue](https://img.shields.io/badge/issue-%237-green.svg)](https://github.com/RoboManipal/Libraries/issues/7)

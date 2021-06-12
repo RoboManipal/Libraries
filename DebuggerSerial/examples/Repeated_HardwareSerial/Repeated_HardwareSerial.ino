@@ -11,7 +11,7 @@
  *    Takes about 2 ms to send messages if baud rate of hardware serial being used is 115200
  * 
  * Created by : @TheProjectsGuy
- * Maintained by : RoboManipal-9-0 organization
+ * Maintained by : RoboManipal organization
  */
 // Include the header file 
 

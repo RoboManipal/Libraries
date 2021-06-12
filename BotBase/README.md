@@ -43,11 +43,11 @@ Beta testing done :tada:
 ## Downloading the library
 It is suggested that you download the entire repository and then select this folder, so that you can enjoy the benefits of VCS like git. It makes it simpler to update the contents whenever patch fixes are done. You can simply open a terminal (or gitbash on windows), go to the folder where you want to save this repository and type the following command.
 ```bash
-git clone https://github.com/RoboManipal-9-0/Libraries.git -b dev
+git clone https://github.com/RoboManipal/Libraries.git -b dev
 ```
 _You might want to omit the `-b <branch>` tag if you're downloading from the master version_.
 
-**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal-9-0/Libraries/tree/dev/BotBase).
+**<font color="#AA0000">Not recommended</font>** : You can download just this folder by clicking [here](https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/RoboManipal/Libraries/tree/dev/BotBase).
 
 ## Using the library with Arduino
 Move this folder into the arduino libraries folder on your PC. If you don't know where the libraries folder of your arduino is, you can check out the README file of this entire repository for this, click [here](../README.md).<br>
